@@ -3,6 +3,14 @@
 # AR3 Core Software
 该存储库提供了用于使用 ros_control 和 MoveIt 控制 AR3 臂的软件。我希望为各位机械臂爱好者提供一个探索使用 ROS 控制机械臂的起点。基线实现旨在适应原始硬件和固件，包括用于通信的消息结构。展望未来，我将尽我所能继续保持它的可访问性。我计划探索一些我想到的有趣概念，用于手臂视觉、抓手和人机交互，如果可能，我将在这里分享我的项目。
 
+->
+
+
+# AR3 핵심 소프트웨어
+이 저장소는 ros_control 및 MoveIt을 사용하여 AR3 암을 제어하기 위한 소프트웨어를 제공합니다. 동료 로봇 팔 애호가들에게 ROS를 사용하여 로봇 팔을 제어할 수 있는 출발점을 제공하고 싶습니다. 기본 구현은 통신에 사용되는 메시지 구조를 포함하여 원래 하드웨어 및 펌웨어에 적응하도록 설계되었습니다. 앞으로는 접근성을 유지하기 위해 최선을 다하겠습니다. 팔 시야, 그리퍼, 인간과 컴퓨터의 상호 작용에 대해 떠오르는 몇 가지 흥미로운 개념을 탐구할 계획이며 가능하면 여기에서 내 프로젝트를 공유할 것입니다
+
+
+
 * [Overview](#概述)
 * [Installation](#安装)
 * [Usage](#用法)
@@ -52,6 +60,21 @@ sudo apt-get install curl && curl http://fishros.com/tools/install/ros-melodic |
 最后使用Ctrl+Alt+T打开一个新的终端，输入roscore如果有打印即安装成功
 ②安装rosdep工具
 curl http://fishros.com/tools/install/rosdepc | bash 
+
+->
+
+### 우분투
+* 빌드 우분투 18.04 운영 체제
+* Ubuntu 18.04에서 [ROS Melodic 및 MoveIt] 설치,
+특정 설치 단계는 다음을 참조할 수 있습니다.
+①ros 개발 환경 설치
+wget http://fishros.com/install -O fishros && .fishros
+sudo apt-get 설치 컬 && 컬 http://fishros.com/tools/install/ros-melodic | bash
+마지막으로 Ctrl+Alt+T를 사용하여 새 터미널을 열고 roscore를 입력하고 인쇄가 있으면 설치가 성공한 것입니다.
+② rosdep 툴 설치
+컬 http://fishros.com/tools/install/rosdepc | bash
+### ubuntu
+
 
 * 创建 ROS 工作区   ar3_ws
   
