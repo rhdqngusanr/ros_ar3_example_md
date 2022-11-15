@@ -1,20 +1,188 @@
 # ros_ar3_example_md
 
+# AR3 핵심 소프트웨어
+이 저장소는 ros_control 및 MoveIt을 사용하여 AR3 암을 제어하기 위한 소프트웨어를 제공합니다. 동료 로봇 팔 애호가들에게 ROS를 사용하여 로봇 팔을 제어할 수 있는 출발점을 제공하고 싶습니다. 기본 구현은 통신에 사용되는 메시지 구조를 포함하여 원래 하드웨어 및 펌웨어에 적응하도록 설계되었습니다. 앞으로는 접근성을 유지하기 위해 최선을 다하겠습니다. 팔 시야, 그리퍼, 인간과 컴퓨터의 상호 작용에 대해 떠오르는 몇 가지 흥미로운 개념을 탐구할 계획이며 가능하면 여기에서 내 프로젝트를 공유할 것입니다.
+
+* [개요](#개요)
+* [설치](#installation)
+* [사용법](#사용법)
+
+## 개요
++ **ar3_control**
+    + MoveIt 사용자 인터페이스를 통한 팔 제어
+    + 모바일 그룹 인터페이스 데모 제공
+    
++ **ar3_description**
+    + 로봇팔 하드웨어 설명, urdf 등 설명
+    
++ **ar3_hardware_interface**
+    + ros_control 프레임워크에 구축된 하드웨어 드라이버용 ROS 인터페이스
+    + 조인트와 액추에이터 메시지 간의 조인트 오프셋, 제한 및 전환 관리
+    
++ **ar3_hardware_drivers**
+    + 모터 컨트롤러와의 통신 처리
+
++ **ar3_microcontrollers**
+    + 모터 컨트롤러용 펌웨어, 예: teensy4.1
+
++ **ar3_moveit_config**
+    + 모션 계획을 위한 MoveIt 모듈
+    + Rviz를 통한 암 제어
+
++ **ar3_gazebo**
+    + Gazebo에서 시뮬레이션
+
+
+## 설치
+*Ubuntu 18.04에서 제한된 테스트. *
+
+* [우분투 18.04](#우분투)
+
+* [ROS 멜로디와 무브잇]
+### 우분투
+* 빌드 우분투 18.04 운영 체제
+* Ubuntu 18.04에서 [ROS Melodic 및 MoveIt] 설치,
+특정 설치 단계는 다음을 참조할 수 있습니다.
+①ros 개발 환경 설치
+wget http://fishros.com/install -O fishros && .fishros
+sudo apt-get 설치 컬 && 컬 http://fishros.com/tools/install/ros-melodic | bash
+마지막으로 Ctrl+Alt+T를 사용하여 새 터미널을 열고 roscore를 입력하고 인쇄가 있으면 설치가 성공한 것입니다.
+② rosdep 툴 설치
+컬 http://fishros.com/tools/install/rosdepc | bash
+
+* ROS 워크스페이스 ar3_ws 생성
+  
+mkdir -p ~/ar3_ws/src && cd "$_"
+  
+* 파일을 작업공간 `src`에 복사합니다.
+
+  작업 공간 디렉토리는 다음과 같아야 합니다.
+  ```
+  ar_ws
+  +-- 소스
+  | +-- ar3_control
+  | +-- ar3_description
+  | +-- ...
+  ```
+* 빌드 작업 공간:
+  ```
+  catkin_make
+  ```
+* 작업 공간 가져오기:
+  ```
+  소스 ~/ar3_ws/devel/setup.bash
+  ```
+  새 터미널을 열 때마다 자동으로 실행되도록 .bashrc에 이것을 추가할 수 있습니다.
+  ```
+  에코 "소스 ~/ar3_ws/devel/setup.bash" >> ~/.bashrc
+  ```
+* 직렬 액세스를 활성화하지 않은 경우 다음을 활성화하십시오.
+  ```
+  sudo addgroup $USER 다이얼아웃
+  ```
+  변경 사항을 적용하려면 로그아웃했다가 다시 로그인해야 합니다.
+이동
+1. 무브잇 설치
+sudo apt-get 설치 ros-melodic-moveit
+
+2. 구성 환경
+소스 /opt/ros/melodic/setup.bash
+
+3. 리소스 파일을 설치합니다.
+sudo apt-get install ros-melodic-moveit-resources
+
+## 설정
+* **하드웨어 인터페이스하드웨어 인터페이스**
+  - `ar3_hardware_interface/config/hardware_driver.yaml`에서 직렬 포트 및 전송 속도 설정
+  
+
+## 용법
+항상 두 개의 모듈을 실행해야 합니다.
+
+1. **팔 모듈** - 실제 또는 시뮬레이션된 팔에 사용할 수 있습니다.
+     + 실제 팔을 제어하려면 `ar3_hardware_interface` 모듈을 실행해야 합니다.
+     + 가상 팔의 경우 `ar3_gazebo` 모듈을 실행해야 합니다.
+     +모든 모듈이 MoveIt에 필요한 하드웨어 설명을 로드합니다.
+
+2. **MoveIt 모듈** - `ar3_moveit_config` 모듈은 MoveIt 인터페이스와 RViz GUI를 제공하고 `ar3_control` 모듈은 프로그래밍 방식으로 대상을 설정하기 위한 MoveIt UI를 제공합니다.
+
+모듈의 다양한 사용 사례와 이를 실행하기 위한 지침은 아래에 설명되어 있습니다.
+
+-----
+
+### RViz의 MoveIt 데모
+MoveIt에 익숙하지 않은 경우 여기부터 시작하여 RViz에서 MoveIt 계획을 탐색하는 것이 좋습니다. 여기에는 실제 세계나 시뮬레이션된 팔이 포함되지 않고 시각화를 위해 RViz에 로드된 모델만 포함됩니다.
+*로봇 설명, moveit 인터페이스 및 RViz는 모두 단일 데모에서 시작 파일을 로드합니다.
+  ```
+  roslaunch ar3_moveit_config 데모.실행
+  ```
+
+-----
+
+-----
+
+### RViz에서 MoveIt을 사용하여 실제 팔 제어
+
+* 구성 및 로봇 설명을 로드할 'ar3_hardware_interface' 모듈을 시작합니다.
+  ```
+ roslaunch ar3_hardware_interface ar3_hardware_bringup.launch
+  하드웨어 인터페이스는 또한 하드웨어 드라이버를 시작하고 십대와의 통신을 초기화합니다. 노드를 시작할 때 `use_existing_calibrations` 매개변수로 조인트 인코더 보정 시퀀스를 건너뜁니다.
+  
+  
+* MoveIt 및 RViz 시작
+  ```
+  roslaunch ar3_moveit_config ar3_moveit_bringup.launch
+  ```
+이제 RViz에서 실제 팔을 계획하고 제어할 수 있습니다. 관절 명령과 관절 상태는 하드웨어 인터페이스를 통해 업데이트됩니다.
+
+-----
+
+### RViz에서 MoveIt을 사용하여 Gazebo에서 시뮬레이션된 팔 제어
+
+* Gazebo 시뮬레이터를 시작하고 로봇 설명을 로드하는 `ar3_gazebo` 모듈을 시작합니다.
+  ```
+  roslaunch ar3_gazebo ar3_gazebo_bringup.launch
+  ```
+* Moveit 및 RViz 시작
+  ```
+  roslaunch ar3_moveit_config ar3_moveit_bringup.launch
+  ```
+이제 RViz에서 시뮬레이션된 팔을 계획하고 제어할 수 있습니다.
+
+-----
+
+### 모바일 그룹 인터페이스가 있는 컨트롤 암
+
+**프로그래밍 대상이 환경(및 팔)에 안전한지 확인하기 위해 먼저 더미 팔로 이 데모를 실행하는 것이 좋습니다. 말할 필요도 없이 자신의 작업을 작성하는 경우에도 마찬가지입니다. **
+
+이것은 공식 MoveIt 튜토리얼에서 수정된 데모입니다. RViz를 통해 수동으로 목표를 설정하는 것과는 달리 이동 그룹 인터페이스를 사용하면 경로 제약 조건 지정 및 데카르트 이동 계획과 같은 추가 기능을 사용하여 프로그래밍 방식으로 이동을 계획하고 실행할 수 있습니다. 이것은 또한 더 복잡한 작업, 장애물 주변 계획 등을 가능하게 합니다.
+
+* Gazebo 시뮬레이터를 시작하고 로봇 설명을 로드하는 `ar3_gazebo` 모듈을 시작합니다.
+* 실제 암을 제어하려면 위와 같이 `ar3_gazebo` 대신 `ar3_hardware_interface`를 실행하면 됩니다. *
+  ```
+  roslaunch ar3_gazebo ar3_gazebo_bringup.launch
+  ```
+* Moveit 및 RViz 시작
+  ```
+  roslaunch ar3_moveit_config ar3_moveit_bringup.launch
+  ```
+* 모바일 그룹 데모 시작
+  ```
+  roslaunch ar3_control move_group_demo.launch
+  ```
+ 데모를 통해 명령줄 지침을 단계별로 따르십시오. 자세한 내용은 'ar3_control'을 참조하십시오.
+
+-----
+
+
+
+
 # AR3 Core Software
 该存储库提供了用于使用 ros_control 和 MoveIt 控制 AR3 臂的软件。我希望为各位机械臂爱好者提供一个探索使用 ROS 控制机械臂的起点。基线实现旨在适应原始硬件和固件，包括用于通信的消息结构。展望未来，我将尽我所能继续保持它的可访问性。我计划探索一些我想到的有趣概念，用于手臂视觉、抓手和人机交互，如果可能，我将在这里分享我的项目。
-
-->
-
-
-# AR3 핵심 소프트웨어
-이 저장소는 ros_control 및 MoveIt을 사용하여 AR3 암을 제어하기 위한 소프트웨어를 제공합니다. 동료 로봇 팔 애호가들에게 ROS를 사용하여 로봇 팔을 제어할 수 있는 출발점을 제공하고 싶습니다. 기본 구현은 통신에 사용되는 메시지 구조를 포함하여 원래 하드웨어 및 펌웨어에 적응하도록 설계되었습니다. 앞으로는 접근성을 유지하기 위해 최선을 다하겠습니다. 팔 시야, 그리퍼, 인간과 컴퓨터의 상호 작용에 대해 떠오르는 몇 가지 흥미로운 개념을 탐구할 계획이며 가능하면 여기에서 내 프로젝트를 공유할 것입니다
-
-
 
 * [Overview](#概述)
 * [Installation](#安装)
 * [Usage](#用法)
-
 
 
 ## Overview
@@ -60,21 +228,6 @@ sudo apt-get install curl && curl http://fishros.com/tools/install/ros-melodic |
 最后使用Ctrl+Alt+T打开一个新的终端，输入roscore如果有打印即安装成功
 ②安装rosdep工具
 curl http://fishros.com/tools/install/rosdepc | bash 
-
-->
-
-### 우분투
-* 빌드 우분투 18.04 운영 체제
-* Ubuntu 18.04에서 [ROS Melodic 및 MoveIt] 설치,
-특정 설치 단계는 다음을 참조할 수 있습니다.
-①ros 개발 환경 설치
-wget http://fishros.com/install -O fishros && .fishros
-sudo apt-get 설치 컬 && 컬 http://fishros.com/tools/install/ros-melodic | bash
-마지막으로 Ctrl+Alt+T를 사용하여 새 터미널을 열고 roscore를 입력하고 인쇄가 있으면 설치가 성공한 것입니다.
-② rosdep 툴 설치
-컬 http://fishros.com/tools/install/rosdepc | bash
-### ubuntu
-
 
 * 创建 ROS 工作区   ar3_ws
   
