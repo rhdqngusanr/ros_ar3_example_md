@@ -100,6 +100,7 @@ sudo apt-get install ros-melodic-moveit-resources
 항상 두 개의 모듈을 실행해야 합니다.
 
 1. **팔 모듈** - 실제 또는 시뮬레이션된 팔에 사용할 수 있습니다.
+
      + 실제 팔을 제어하려면 `ar3_hardware_interface` 모듈을 실행해야 합니다.
      + 가상 팔의 경우 `ar3_gazebo` 모듈을 실행해야 합니다.
      +모든 모듈이 MoveIt에 필요한 하드웨어 설명을 로드합니다.
