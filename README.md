@@ -126,8 +126,9 @@ MoveIt에 익숙하지 않은 경우 여기부터 시작하여 RViz에서 MoveIt
 
 * 구성 및 로봇 설명을 로드할 'ar3_hardware_interface' 모듈을 시작합니다.
   ```
- roslaunch ar3_hardware_interface ar3_hardware_bringup.launch
-  하드웨어 인터페이스는 또한 하드웨어 드라이버를 시작하고 십대와의 통신을 초기화합니다. 노드를 시작할 때 `use_existing_calibrations` 매개변수로 조인트 인코더 보정 시퀀스를 건너뜁니다.
+ 	roslaunch ar3_hardware_interface ar3_hardware_bringup.launch
+  
+  	하드웨어 인터페이스는 또한 하드웨어 드라이버를 시작하고 십대와의 통신을 초기화합니다. 노드를 시작할 때 `use_existing_calibrations` 매개변수로 조인트 인코더 보정 시퀀스를 건너뜁니다.
   
   
 * MoveIt 및 RViz 시작
