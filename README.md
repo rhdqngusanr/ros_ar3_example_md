@@ -70,11 +70,11 @@ mkdir -p ~/ar3_ws/src && cd "$_"
   ```
 * 작업 공간 가져오기:
   ```
-    source ~/ar3_ws/devel/setup.bash
+  source ~/ar3_ws/devel/setup.bash
   ```
   새 터미널을 열 때마다 자동으로 실행되도록 .bashrc에 이것을 추가할 수 있습니다.
   ```
-echo "source ~/ar3_ws/devel/setup.bash" >> ~/.bashrc
+  echo "source ~/ar3_ws/devel/setup.bash" >> ~/.bashrc
   ```
 * 직렬 액세스를 활성화하지 않은 경우 다음을 활성화하십시오.
   ```
