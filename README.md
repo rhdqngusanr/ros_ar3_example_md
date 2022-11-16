@@ -44,11 +44,11 @@
 * Ubuntu 18.04에서 [ROS Melodic 및 MoveIt] 설치,
 특정 설치 단계는 다음을 참조할 수 있습니다.
 ①ros 개발 환경 설치
-wget http://fishros.com/install -O fishros && .fishros
-sudo apt-get 설치 컬 && 컬 http://fishros.com/tools/install/ros-melodic | bash
+get http://fishros.com/install -O fishros && . fishros
+sudo apt-get install curl && curl http://fishros.com/tools/install/ros-melodic | bash
 마지막으로 Ctrl+Alt+T를 사용하여 새 터미널을 열고 roscore를 입력하고 인쇄가 있으면 설치가 성공한 것입니다.
 ② rosdep 툴 설치
-컬 http://fishros.com/tools/install/rosdepc | bash
+curl http://fishros.com/tools/install/rosdepc | bash 
 
 * ROS 워크스페이스 ar3_ws 생성
   
@@ -70,23 +70,23 @@ mkdir -p ~/ar3_ws/src && cd "$_"
   ```
 * 작업 공간 가져오기:
   ```
-  소스 ~/ar3_ws/devel/setup.bash
+    source ~/ar3_ws/devel/setup.bash
   ```
   새 터미널을 열 때마다 자동으로 실행되도록 .bashrc에 이것을 추가할 수 있습니다.
   ```
-  에코 "소스 ~/ar3_ws/devel/setup.bash" >> ~/.bashrc
+echo "source ~/ar3_ws/devel/setup.bash" >> ~/.bashrc
   ```
 * 직렬 액세스를 활성화하지 않은 경우 다음을 활성화하십시오.
   ```
-  sudo addgroup $USER 다이얼아웃
+  sudo addgroup $USER dialout
   ```
   변경 사항을 적용하려면 로그아웃했다가 다시 로그인해야 합니다.
 이동
 1. 무브잇 설치
-sudo apt-get 설치 ros-melodic-moveit
+sudo apt-get install ros-melodic-moveit
 
 2. 구성 환경
-소스 /opt/ros/melodic/setup.bash
+source /opt/ros/melodic/setup.bash
 
 3. 리소스 파일을 설치합니다.
 sudo apt-get install ros-melodic-moveit-resources
